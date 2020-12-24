@@ -1,6 +1,6 @@
 [package]
 name = "galbi"
-version = "0.0.0" 
+version = "0.1.0" 
 authors = ["myyrakle <sssang97@naver.com>"] 
 description = "test crate" 
 keywords = ["shortcut"] 
@@ -8,7 +8,7 @@ edition = "2018"
 license = "MIT" 
 include = ["src/*", "Cargo.toml"] 
 exclude = ["src/main.rs"] 
-readme = "README.md" #crate 페이지의 소개문 파일
+readme = "README.md" 
 repository = "https://github.com/myyrakle/galbi" 
 documentation = "https://github.com/myyrakle/galbi/blob/master/README.md" 
 homepage = "https://github.com/myyrakle/galbi/blob/master/README.md" 

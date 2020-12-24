@@ -3,9 +3,7 @@ mod lib;
 use lib::*;
 
 fn main() {
-    //let ptr = OptionBox::new(Some(123));
-    //let b = ptr.as_ref().unwrap();
-    let arc = ArcMutex::new(234);
-    let foo = arc.lock().unwrap();
+    let ptr = RcCell::new(123);
+    let foo = ptr.borrow();
     println!("{}", foo);
 }

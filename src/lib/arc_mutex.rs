@@ -1,6 +1,7 @@
 use std::ops::{Deref, DerefMut};
 use std::sync::{Arc, Mutex};
 
+#[derive(Clone)]
 pub struct ArcMutex<T> {
     ptr: Arc<Mutex<T>>,
 }
