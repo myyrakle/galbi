@@ -1,3 +1,8 @@
+#[path = "./lib.rs"]
+mod lib;
+use lib::*;
+
 fn main() {
-    println!("Hello, world!");
+    let ptr = OptionBox::new(Some(123));
+    let b = ptr.unwrap();
 }
