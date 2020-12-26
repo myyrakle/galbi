@@ -6,6 +6,7 @@ pub struct OptionBox<T> {
 }
 
 //use std::pin::Pin;
+use std::option::{Iter, IterMut};
 
 impl<T> OptionBox<T> {
     /// Create a new object.
@@ -214,5 +215,73 @@ impl<T> OptionBox<T> {
         F: FnOnce(Box<T>)->U
     {
         self.ptr.map_or_else(default, f)
+    }
+
+    /// Transforms the `Option<Box<T>>` into a `Result<Box<T>, E>`, mapping Some(v) to Ok(v) and None to Err(err).
+    /// Arguments passed to ok_or are eagerly evaluated; if you are passing the result of a function call, it is recommended to use ok_or_else, which is lazily evaluated.
+    /// 
+    /// ```rust
+    /// use galbi::*;
+    /// 
+    /// let x = OptionBox::some(10);
+    /// assert_eq!(x.ok_or(Box::new(0)), Ok(Box::new(10)));
+    /// 
+    /// let x: OptionBox<i32> = OptionBox::none();
+    /// assert_eq!(x.ok_or(Box::new(0)), Err(Box::new(0)));
+    /// ```
+    pub fn ok_or<E>(self, err: E) -> Result<Box<T>, E>
+    {
+        self.ptr.ok_or(err)
+    }
+
+    /// Transforms the Option<Box<T>> into a Result<Box<T>, E>, mapping Some(v) to Ok(v) and None to Err(err()).
+    /// 
+    /// ```rust
+    /// use galbi::*;
+    /// 
+    /// let x = OptionBox::some(10);
+    /// assert_eq!(x.ok_or_else(||Box::new(0)), Ok(Box::new(10)));
+    /// 
+    /// let x: OptionBox<i32> = OptionBox::none();
+    /// assert_eq!(x.ok_or_else(||Box::new(0)), Err(Box::new(0)));
+    /// ```
+    pub fn ok_or_else<E, F>(self, err: F) -> Result<Box<T>, E>
+    where
+        F: FnOnce() -> E, {
+        self.ptr.ok_or_else(err)
+    }
+
+    /// Returns an iterator over the possibly contained value.
+    /// 
+    /// ```rust
+    /// use galbi::*;
+    /// 
+    /// let x = OptionBox::some(10);
+    /// assert_eq!(x.iter().next(), Some(&Box::new(10)));
+    /// 
+    /// let x: OptionBox<i32> = OptionBox::none();
+    /// assert_eq!(x.iter().next(), None);
+    /// ```
+    pub fn iter(&self) -> Iter<'_, Box<T>> {
+        self.ptr.iter()
+    }
+
+    /// Returns a mutable iterator over the possibly contained value.
+    /// 
+    /// ```rust
+    /// use galbi::*;
+    /// 
+    /// let mut x = OptionBox::some(4);
+    /// match x.iter_mut().next() {
+    ///    Some(v) => *v = Box::new(42),
+    ///    None => {},
+    /// }
+    /// assert_eq!(x, OptionBox::some(42));
+    /// 
+    /// let mut x: OptionBox<u32> = OptionBox::none();
+    /// assert_eq!(x.iter_mut().next(), None);
+    /// ```
+    pub fn iter_mut(&mut self) -> IterMut<'_, Box<T>> {
+        self.ptr.iter_mut()
     }
 }
