@@ -37,8 +37,9 @@ fn main()
 - [repository](https://github.com/myyrakle/galbi)
 */
 
-//pub mod option_box;
-//pub use option_box::*;
+#[path="./impl/option_box.rs"]
+pub mod option_box;
+pub use option_box::*;
 
 #[path="./impl/rc_cell.rs"]
 pub mod rc_cell;
