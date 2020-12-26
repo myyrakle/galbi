@@ -1,6 +1,6 @@
 [package]
 name = "galbi"
-version = "0.2.0" 
+version = "0.2.1" 
 authors = ["myyrakle <sssang97@naver.com>"] 
 description = "some shortcut types" 
 keywords = ["shortcut", "type"] 

@@ -1,3 +1,5 @@
+//! It is Wrapper Type of `Arc<Mutex<T>>`
+
 use std::ops::{Deref, DerefMut};
 use std::sync::{Arc, Mutex};
 
@@ -7,6 +9,15 @@ pub struct ArcMutex<T> {
 }
 
 impl<T> ArcMutex<T> {
+    /// Create a new object.
+    ///
+    /// ```rust
+    /// use galbi::*;
+    ///
+    /// let shared = ArcMutex::new(15);
+    /// let get = shared.lock().unwrap();
+    /// assert_eq!(15, *get);
+    /// ```
     pub fn new(x: T) -> ArcMutex<T> {
         ArcMutex {
             ptr: Arc::new(Mutex::new(x)),

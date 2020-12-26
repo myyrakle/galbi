@@ -1,3 +1,5 @@
+//! It is Wrapper Type of `Rc<RefCell<T>>`
+
 use std::cell::RefCell;
 use std::ops::{Deref, DerefMut};
 use std::rc::Rc;
@@ -8,6 +10,15 @@ pub struct RcCell<T> {
 }
 
 impl<T> RcCell<T> {
+    /// Create a new object.
+    ///
+    /// ```rust
+    /// use galbi::*;
+    ///
+    /// let shared = RcCell::new(15);
+    /// let get = shared.borrow();
+    /// assert_eq!(15, *get);
+    /// ```
     pub fn new(x: T) -> RcCell<T> {
         RcCell {
             ptr: Rc::new(RefCell::new(x)),
