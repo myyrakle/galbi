@@ -334,4 +334,28 @@ impl<T> OptionBox<T> {
     {
         self.ptr.and_then(f)
     }
+
+    /// Returns None if the option is None, otherwise calls predicate with the wrapped value and returns:
+    /// - [Some(t)] if predicate returns true (where t is the wrapped value), and
+    /// - None if predicate returns false.
+    /// This function works similar to Iterator::filter(). You can imagine the Option<Box<T>> being an iterator over one or zero elements. filter() lets you decide which elements to keep.
+    ///
+    /// ```rust
+    /// use galbi::*;
+    ///
+    /// fn is_even(ptr: &Box<i32>) -> bool {
+    ///     let num: i32 = **ptr;
+    ///     num % 2 == 0
+    /// }
+    ///
+    /// assert_eq!(OptionBox::none().filter(is_even), None);
+    /// assert_eq!(OptionBox::some(3).filter(is_even), None);
+    /// assert_eq!(OptionBox::some(4).filter(is_even), Some(Box::new(4)));
+    /// ```
+    pub fn filter<P>(self, predicate: P) -> Option<Box<T>>
+    where
+        P: FnOnce(&Box<T>) -> bool,
+    {
+        self.ptr.filter(predicate)
+    }
 }
