@@ -358,4 +358,33 @@ impl<T> OptionBox<T> {
     {
         self.ptr.filter(predicate)
     }
+
+    /// Returns the option if it contains a value, otherwise returns optb.
+    /// Arguments passed to or are eagerly evaluated; if you are passing the result of a function call, it is recommended to use or_else, which is lazily evaluated.
+    ///
+    /// ```rust
+    /// use galbi::*;
+    ///
+    /// let x = OptionBox::some(2);
+    /// let y = None;
+    /// assert_eq!(x.or(y), Some(Box::new(2)))
+    /// ```
+    pub fn or(self, optb: Option<Box<T>>) -> Option<Box<T>> {
+        self.ptr.or(optb)
+    }
+
+    /// Returns the option if it contains a value, otherwise calls f and returns the result.
+    ///
+    /// ```rust
+    /// use galbi::*;
+    ///
+    /// let x: OptionBox<i32> = OptionBox::none();
+    /// assert_eq!(x.or_else(|| Some(Box::new(1234))), Some(Box::new(1234)))
+    /// ```
+    pub fn or_else<F>(self, f: F) -> Option<Box<T>>
+    where
+        F: FnOnce() -> Option<Box<T>>,
+    {
+        self.ptr.or_else(f)
+    }
 }
