@@ -387,4 +387,17 @@ impl<T> OptionBox<T> {
     {
         self.ptr.or_else(f)
     }
+
+    /// Returns Some if exactly one of self, optb is Some, otherwise returns None.
+    ///
+    /// ```rust
+    /// use galbi::*;
+    ///
+    /// let x = OptionBox::some(2);
+    /// let y = None;
+    /// assert_eq!(x.xor(y), Some(Box::new(2)))
+    /// ```
+    pub fn xor(self, optb: Option<Box<T>>) -> Option<Box<T>> {
+        self.ptr.xor(optb)
+    }
 }
