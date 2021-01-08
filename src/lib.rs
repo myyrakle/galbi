@@ -14,7 +14,7 @@ galbi = "0.2.1"
 ```
 
 ## use
-It can be used in the following format. 
+It can be used in the following format.
 Since the automatic dereferencing trait is implemented, you can use the inner methods right away.
 ```rust
 use galbi::*;
@@ -30,6 +30,7 @@ fn main()
 ## features
 - Rc<RefCell&lt;T>> -> RcCell<T>
 - Arc<Mutex&lt;T>> -> ArcMutex<T>
+- Option<Box&lt;T>> -> OptionBox<T>
 - ... more later
 
 ## link
@@ -37,15 +38,14 @@ fn main()
 - [repository](https://github.com/myyrakle/galbi)
 */
 
-#[path="./impl/option_box.rs"]
+#[path = "./impl/option_box.rs"]
 pub mod option_box;
 pub use option_box::*;
 
-#[path="./impl/rc_cell.rs"]
+#[path = "./impl/rc_cell.rs"]
 pub mod rc_cell;
 pub use rc_cell::*;
 
-#[path="./impl/arc_mutex.rs"]
+#[path = "./impl/arc_mutex.rs"]
 pub mod arc_mutex;
 pub use arc_mutex::*;
-

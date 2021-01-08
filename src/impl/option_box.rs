@@ -400,4 +400,93 @@ impl<T> OptionBox<T> {
     pub fn xor(self, optb: Option<Box<T>>) -> Option<Box<T>> {
         self.ptr.xor(optb)
     }
+
+    /// Inserts v into the option if it is None, then returns a mutable reference to the contained value.
+    ///
+    /// ```rust
+    /// use galbi::*;
+    ///
+    /// let mut x:OptionBox<i32> = OptionBox::none();
+    /// {
+    ///     let y: &mut Box<i32> = x.get_or_insert(Box::new(5));
+    ///     assert_eq!(y, &Box::new(5));
+    ///
+    ///     *y = Box::new(10);
+    /// }
+    ///
+    /// assert_eq!(x, OptionBox::some(10))
+    /// ```
+    pub fn get_or_insert(&mut self, v: Box<T>) -> &mut Box<T> {
+        self.ptr.get_or_insert(v)
+    }
+
+    /// Inserts a value computed from f into the option if it is None, then returns a mutable reference to the contained value.
+    ///
+    /// ```rust
+    /// use galbi::*;
+    ///
+    /// let mut x:OptionBox<i32> = OptionBox::none();
+    /// {
+    ///     let y: &mut Box<i32> = x.get_or_insert_with(|| Box::new(5));
+    ///     assert_eq!(y, &Box::new(5));
+    ///
+    ///     *y = Box::new(10);
+    /// }
+    ///
+    /// assert_eq!(x, OptionBox::some(10))
+    /// ```
+    pub fn get_or_insert_with<F>(&mut self, f: F) -> &mut Box<T>
+    where
+        F: FnOnce() -> Box<T>,
+    {
+        self.ptr.get_or_insert_with(f)
+    }
+
+    /// Takes the value out of the option, leaving a None in its place.
+    ///
+    /// ```rust
+    /// use galbi::*;
+    ///
+    /// let mut x = OptionBox::some(1234);
+    /// let y = x.take();
+    ///
+    /// assert_eq!(x, OptionBox::none());
+    /// assert_eq!(y, Some(Box::new(1234)));
+    /// ```
+    pub fn take(&mut self) -> Option<Box<T>> {
+        self.ptr.take()
+    }
+
+    /// Replaces the actual value in the option by the value given in parameter, returning the old value if present, leaving a Some in its place without deinitializing either one.
+    ///
+    /// ```rust
+    /// use galbi::*;
+    ///
+    /// let mut x = OptionBox::some(2);
+    /// let old = x.replace(Box::new(5));
+    /// assert_eq!(x, OptionBox::some(5));
+    /// assert_eq!(old, Some(Box::new(2)));
+    /// ```
+    pub fn replace(&mut self, value: Box<T>) -> Option<Box<T>> {
+        self.ptr.replace(value)
+    }
+
+    /// Zips self with another Option.
+    /// If self is Some(s) and other is Some(o), this method returns Some((s, o)). Otherwise, None is returned.
+    ///
+    /// ```rust
+    /// use galbi::*;
+    ///
+    /// let x = OptionBox::some(1);
+    /// let y = Some("foo");
+    /// let z = None::<i32>;
+    ///
+    /// assert_eq!(x.zip(y), Some((Box::new(1), "foo")));
+    ///
+    /// let x = OptionBox::some(1);
+    /// assert_eq!(x.zip(z), None);
+    /// ```
+    pub fn zip<U>(self, other: Option<U>) -> Option<(Box<T>, U)> {
+        self.ptr.zip(other)
+    }
 }
